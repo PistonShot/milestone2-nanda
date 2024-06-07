@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Inverse and Linear Systems Solver</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .GaussianEliminationSolve {
+            justify-content: center;
+            justify-self: center;
+            justify-items: center;
+            align-items: center;
+            align-content: center;
+            display: flex;
+            flex-direction: column;
+            -ms-flex-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="GaussianEliminationSolve">
+        <span>Made by : Nandaprian (212890)</span>
+        <h1>Calculator 1 : Linear Systems Solver</h1>
+        <h2>Enter the matrix A and vector b</h2>
+        <span>For example, if your equation to solve is as below :</span><br>
+        <span>2x-3y-2z = 8</span>
+        <span>x-y+z = -11</span>
+        <span>-x+2y+2z = -3</span>
+        <span>Then, your input for matrix A will be :</span><br>
+        <span>2,-3,-2;1,-1,1;-1,2,2</span><br>
+        <span>Your input for matrix for Vector b will be : </span><br>
+        <span>8,-11,-3</span><br>
+
+        <form id="solveForm">
+            <label for="matrix">Matrix A (comma-separated column, semicolon-separated rows):</label><br>
+            <textarea id="matrix" name="matrix" rows="10" cols="60"></textarea><br><br>
+            <label for="vector">Vector b (comma-separated):</label><br>
+            <span><input type="text" id="vector" name="vector"></span><br><br>
+            <input type="submit" value="Solve">
+        </form>
+        <div style="border: 3px solid green; padding: 20px 40px 20px 40px;">
+            <span style="font-weight: bold;">Solution:</span>
+            <p id="solution" style="color:green"></p>
+        </div>
+    </div>
+
+    <div class="GaussianEliminationSolve">
+        <h1>Calculator 2 : Inverse Matrix Finder </h1>
+        <h2>Enter the matrix A</h2>
+        <span>For example, if your matrix A is as below (2x2) :</span><br>
+        <span> [4, 7]</span>
+        <span> [2, 6]</span>
+        <span>Then, your input for matrix A will be :</span><br>
+        <span>4,7;2,6</span><br>
+        <form id="solveForm2">
+            <label for="matrix2">Matrix A (comma-separated column, semicolon-separated rows):</label><br>
+            <textarea id="matrix2" name="matrix2" rows="10" cols="60"></textarea><br><br>
+            <input type="submit" value="Solve">
+        </form>
+        <div style="border: 3px solid green; padding: 20px 40px 20px 40px;">
+            <span style="font-weight: bold;">Solution:</span>
+            <p id="solution2" style="color:green"></p>
+            <p id="shape"></p>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#solveForm').on('submit', function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/solve/solution',
+                    data: {
+                        matrix: $('#matrix').val(),
+                        vector: $('#vector').val()
+                    },
+                    success: function (response) {
+                        $('#solution').text("The solution is: " + response.solution);
+                    },
+                    error: function (error) {
+                        $('#solution').text("An error occurred.");
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('#solveForm2').on('submit', function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/solve/inverse',
+                    data: {
+                        matrix: $('#matrix2').val(),
+                    },
+                    success: function (response) {
+                        $('#solution2').text("The solution is: " + response.solution);
+                        $('#shape').text("The shape of the matrix : (" + response.shape + " )")
+                    },
+                    error: function (error) {
+                        $('#solution2').text("An error occurred.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
